@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">hitfilm</string>
+    <string-array name="order_array">
+        <item>以最受欢迎排序</item>
+        <item>以评分最高排序</item>
+    </string-array>
+</resources>
