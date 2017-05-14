@@ -4,4 +4,5 @@
         <item>以最受欢迎排序</item>
         <item>以评分最高排序</item>
     </string-array>
+    <string name="image_placehold">IMAGE_NAME</string>
 </resources>

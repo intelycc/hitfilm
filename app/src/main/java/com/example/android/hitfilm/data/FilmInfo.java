@@ -1,5 +1,8 @@
 package com.example.android.hitfilm.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 /**
@@ -62,4 +65,43 @@ public class FilmInfo implements Serializable{
     public void setOverView(String overView) {
         this.overView = overView;
     }
+
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeString(this.posterPath);
+//        dest.writeValue(this.adult);
+//        dest.writeString(this.releaseDate);
+//        dest.writeString(this.overView);
+//        dest.writeDouble(this.voteAverage);
+//        dest.writeString(this.originalTitle);
+//    }
+
+    public FilmInfo() {
+    }
+
+//    protected FilmInfo(Parcel in) {
+//        this.posterPath = in.readString();
+//        this.adult = (Boolean) in.readValue(Boolean.class.getClassLoader());
+//        this.releaseDate = in.readString();
+//        this.overView = in.readString();
+//        this.voteAverage = in.readDouble();
+//        this.originalTitle = in.readString();
+//    }
+//
+//    public static final Creator<FilmInfo> CREATOR = new Creator<FilmInfo>() {
+//        @Override
+//        public FilmInfo createFromParcel(Parcel source) {
+//            return new FilmInfo(source);
+//        }
+//
+//        @Override
+//        public FilmInfo[] newArray(int size) {
+//            return new FilmInfo[size];
+//        }
+//    };
 }

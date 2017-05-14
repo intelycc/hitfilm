@@ -54,17 +54,16 @@ public final class NetworkUtils {
      * @param sortBy The sort condition.
      * @return The URL to use to query the themoviedb server.
      */
-    public static URL buildUrl(SortCriteria sortBy) {
+    public static URL buildUrl(Integer sortBy) {
         String apiAddress = TheMovieDbConfig.FILM_BASE_URL;
 
-        switch (sortBy){
-            case POPULAR:
-                apiAddress += POPULAR_PATH;
-                break;
-            case RATED:
-                apiAddress += TOP_RATED_PATH;
-                break;
-            default:
+        if(sortBy.equals(SortCriteria.POPULAR)){
+            apiAddress += POPULAR_PATH;
+        }else if (sortBy.equals(SortCriteria.RATED)){
+            apiAddress += TOP_RATED_PATH;
+        }else{
+            Log.w(TAG, "sortBy error!");
+            return null;
         }
 
         Uri builtUri = Uri.parse(apiAddress).buildUpon()
@@ -94,6 +93,8 @@ public final class NetworkUtils {
      */
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setConnectTimeout(5000);
+        urlConnection.setReadTimeout(10000);
         try {
             InputStream in = urlConnection.getInputStream();
 

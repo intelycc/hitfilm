@@ -41,7 +41,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 movieTitleTextView.setText(filmInfo.getOriginalTitle());
 
                 Uri imageUri = Uri.parse(TheMovieDbConfig.IMAGE_BASE_URL+filmInfo.getPosterPath());
-                Picasso.with(this).load(imageUri.toString()).into(movieImageView);
+                Picasso.with(this).load(imageUri.toString()).resize(300, 450).into(movieImageView);
 
                 movieReleaseDateTextView.setText(filmInfo.getReleaseDate());
 

@@ -55,7 +55,9 @@ public class HitFilmAdapter extends RecyclerView.Adapter<HitFilmAdapter.HitFilmA
         FilmInfo filmInfo = filmInfoList.get(position);
         String posterPath = filmInfo.getPosterPath();
         Uri imageUri = Uri.parse(TheMovieDbConfig.IMAGE_BASE_URL+posterPath);
-        Picasso.with(context).load(imageUri.toString()).into(holder.filmImageView);
+        Picasso.with(context).load(imageUri.toString())
+                             .resize(300, 450)
+                             .into(holder.filmImageView);
 
         holder.filmTitleTextView.setText(filmInfo.getOriginalTitle());
     }

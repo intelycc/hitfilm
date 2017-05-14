@@ -15,6 +15,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.android.hitfilm.AsyncTask.AsyncTaskCompleteListener;
+import com.example.android.hitfilm.AsyncTask.FetchFilmDataTask;
 import com.example.android.hitfilm.data.FilmInfo;
 import com.example.android.hitfilm.enums.SortCriteria;
 import com.example.android.hitfilm.utilities.NetworkUtils;
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements HitFilmAdapter.Fi
     private static final int COLUMNS_NUM = 4;
     private RecyclerView mRecyclerView;
     private HitFilmAdapter mHitFilmAdapter;
-    private ProgressBar mLoadingProgressBar;
+    public ProgressBar mLoadingProgressBar;
     private TextView mErrorTextView;
     private Spinner orderSpinner;
     private Context context = this;
@@ -78,9 +80,10 @@ public class MainActivity extends AppCompatActivity implements HitFilmAdapter.Fi
 
     }
 
-    private void loadFilmData(SortCriteria criteria){
+    private void loadFilmData(Integer criteria){
         showMovieDataView();
-        new FetchHitFilmTask().execute(criteria);
+        new FetchFilmDataTask(this, new FetchMyDataTaskCompleteListener()).execute(criteria);
+//        new FetchHitFilmTask().execute(criteria);
     }
 
     private void showMovieDataView() {
@@ -88,50 +91,11 @@ public class MainActivity extends AppCompatActivity implements HitFilmAdapter.Fi
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    private void showErrorMessage() {
+    public void showErrorMessage() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mErrorTextView.setVisibility(View.VISIBLE);
     }
 
-
-    public class FetchHitFilmTask extends AsyncTask<SortCriteria, Void, List<FilmInfo>>{
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mLoadingProgressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected List<FilmInfo> doInBackground(SortCriteria... params) {
-            List<FilmInfo> films = null;
-            if(params.length == 0){
-                return null;
-            }
-
-            URL url = NetworkUtils.buildUrl(params[0]);
-            try {
-                String filmStringData = NetworkUtils.getResponseFromHttpUrl(url);
-                films = NetworkUtils.transformJsonData(filmStringData);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return films;
-        }
-
-        @Override
-        protected void onPostExecute(List<FilmInfo> filmInfos) {
-            mLoadingProgressBar.setVisibility(View.INVISIBLE);
-
-            if(filmInfos != null){
-                mHitFilmAdapter.setFilmInfoList(filmInfos);
-            }else{
-                showErrorMessage();
-            }
-
-        }
-    }
 
     @Override
     public void onClick(FilmInfo filmInfo) {
@@ -139,6 +103,26 @@ public class MainActivity extends AppCompatActivity implements HitFilmAdapter.Fi
         Intent intent = new Intent(context, destinationClass);
         intent.putExtra("clicked_film", filmInfo);
         startActivity(intent);
+    }
+
+    public class FetchMyDataTaskCompleteListener implements AsyncTaskCompleteListener<List<FilmInfo>> {
+
+        @Override
+        public void onTaskComplete(List<FilmInfo> filmInfos) {
+            mLoadingProgressBar.setVisibility(View.INVISIBLE);
+            if(filmInfos != null){
+                mHitFilmAdapter.setFilmInfoList(filmInfos);
+            }else{
+                showErrorMessage();
+            }
+
+
+        }
+
+        @Override
+        public void onTaskPreStart() {
+            mLoadingProgressBar.setVisibility(View.VISIBLE);
+        }
     }
 
 }
